@@ -1,0 +1,1 @@
+# SigmaOS-tools-folio\n\nSigmaOS folio - Fast native file manager\n

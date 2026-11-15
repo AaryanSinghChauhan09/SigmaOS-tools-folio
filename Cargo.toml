@@ -1,0 +1,14 @@
+[package]
+name = "sigmaos-tools-folio"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "sigmaos_tools_folio"
+path = "src/lib.rs"
+
+[[bin]]
+name = "folio"
+path = "src/main.rs"
+
+[dependencies]
