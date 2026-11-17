@@ -3,7 +3,7 @@ name = "SigmaOS-tools-folio"
 tier = 2
 stability = "scaffold"
 language = "rust"
-description = "tools-folio component"
+description = "SigmaOS Tools folio - Fast native file manager (omacom/folio parity)"
 upstream = []
 
 [contract]
