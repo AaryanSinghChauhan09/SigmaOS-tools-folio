@@ -1,3 +1,4 @@
+#![forbid(unsafe_code)]
 //! folio - File manager for SigmaOS
 
 use std::path::{Path, PathBuf};
@@ -133,5 +134,48 @@ impl FileManager {
 
     pub fn toggle_hidden(&mut self) {
         self.show_hidden = !self.show_hidden;
+    }
+}
+
+
+#[cfg(test)]
+mod folio_extra_tests {
+    use super::*;
+
+    #[test]
+    fn test_human_size_formatting_aaa() {
+        // Arrange
+        let e_small = FileEntry {
+            name: "small.txt".into(),
+            path: PathBuf::from("/small.txt"),
+            kind: EntryKind::File,
+            size_bytes: 500,
+            extension: Some("txt".into()),
+        };
+        let e_mb = FileEntry {
+            name: "big.iso".into(),
+            path: PathBuf::from("/big.iso"),
+            kind: EntryKind::File,
+            size_bytes: 10_485_760,
+            extension: Some("iso".into()),
+        };
+        // Act & Assert
+        assert_eq!(e_small.human_size(), "500 B");
+        assert!(e_mb.human_size().contains("MB"));
+    }
+
+    #[test]
+    fn test_directory_kind_aaa() {
+        // Arrange
+        let dir = FileEntry {
+            name: "docs".into(),
+            path: PathBuf::from("/docs"),
+            kind: EntryKind::Directory,
+            size_bytes: 4096,
+            extension: None,
+        };
+        // Act & Assert
+        assert!(dir.is_dir());
+        assert!(!dir.is_hidden());
     }
 }
