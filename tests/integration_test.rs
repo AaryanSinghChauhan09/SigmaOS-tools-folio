@@ -1,38 +1,37 @@
-use sigmaos_tools_folio::{FileEntry, FileManager};
-use std::path::PathBuf;
+//! Integration tests for sigmaos-tools-folio.
 
-#[test]
-fn test_navigate_and_list_aaa() {
-    // Arrange
-    let mut fm = FileManager::new(PathBuf::from("/tmp"));
-    // Act
-    fm.navigate_to(PathBuf::from("/tmp")).unwrap();
-    // Assert
-    assert_eq!(fm.current_dir, PathBuf::from("/tmp"));
+use sigmaos_tools_folio::{Browser, History, default_places};
+
+
+fn fixture() -> tempfile::TempDir {
+    let d = tempfile::tempdir().unwrap();
+    std::fs::create_dir_all(d.path().join("docs")).unwrap();
+    std::fs::write(d.path().join("a.txt"), "x").unwrap();
+    std::fs::write(d.path().join("b.txt"), "y").unwrap();
+    d
 }
 
 #[test]
-fn test_history_navigation_aaa() {
-    // Arrange
-    let mut fm = FileManager::new(PathBuf::from("/tmp"));
-    fm.navigate_to(PathBuf::from("/")).unwrap();
-    // Act
-    let went_back = fm.go_back();
-    // Assert
-    assert!(went_back.is_some());
-    assert_eq!(fm.current_dir, PathBuf::from("/tmp"));
+fn test_browser_lists_directory() {
+    let d = fixture();
+    let b = Browser::open(d.path()).unwrap();
+    assert!(b.entries.iter().any(|e| e.name == "a.txt"));
+    assert!(b.entries.iter().any(|e| e.name == "docs"));
 }
 
 #[test]
-fn test_hidden_file_detection_aaa() {
-    // Arrange
-    let entry = FileEntry {
-        name: ".hidden".into(),
-        path: PathBuf::from("/.hidden"),
-        kind: sigmaos_tools_folio::EntryKind::File,
-        size_bytes: 0,
-        extension: None,
-    };
-    // Act & Assert
-    assert!(entry.is_hidden());
+fn test_places_default() {
+    let p = default_places();
+    assert!(p.get("Home").is_some());
+    assert!(p.get("Root").is_some());
+}
+
+#[test]
+fn test_history_nav() {
+    let d = fixture();
+    let mut h = History::new();
+    h.push("/a"); h.push("/b"); h.push("/c");
+    assert!(h.can_back());
+    assert_eq!(h.back(), Some("/b"));
+    assert_eq!(h.forward(), Some("/c"));
 }
