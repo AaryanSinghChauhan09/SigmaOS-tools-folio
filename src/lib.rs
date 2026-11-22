@@ -16,9 +16,11 @@ pub mod entry;
 pub mod error;
 pub mod history;
 pub mod places;
+pub mod tui;
 
 pub use browser::{Browser, SortMode};
 pub use entry::{Entry, EntryKind};
 pub use error::FolioError;
 pub use history::History;
 pub use places::{Places, default_places};
+pub use tui::{TuiOpts, handle_key, render_browser};

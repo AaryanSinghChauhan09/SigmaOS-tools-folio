@@ -12,5 +12,5 @@ depends_on = []
 
 [maturity]
 status = "Implemented"
-test_evidence = "cargo test: 10 tests pass (sort, filter, nav, history)"
+test_evidence = "cargo test: 12 tests pass (browser, entries, TUI render)"
 next_milestone = "Hardware and runtime integration"
